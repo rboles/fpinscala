@@ -172,14 +172,32 @@ object PolymorphicFunctions {
 
   // Note that `=>` associates to the right, so we could 
   // write the return type as `A => B => C`
-  def curry[A,B,C](f: (A, B) => C): A => (B => C) =
-    ??? 
+  def curry[A,B,C](f: (A, B) => C): A => (B => C) = {
+    def g(a: A): B => C = {
+      def h(b: B): C = {
+        f(a, b)
+      }
+      h
+    }
+    g
+  }
+
+  // A compact curry with a function literal
+  def curryCompact1[A, B, C](f: (A, B) => C): A => (B => C) = {
+    def g(a: A): B => C = {
+      (b: B) => f(a, b)
+    }
+    g
+  }
+
+  // Super compact'ed with 2 funciton literals
+  def currySuperCompact[A, B, C](f: (A, B) => C): A => (B => C) =
+    (a: A) => (b: B) => f(a, b)
 
   // NB: The `Function2` trait has a `curried` method already
 
   // Exercise 5: Implement `uncurry`
-  def uncurry[A,B,C](f: A => B => C): (A, B) => C =
-    ??? 
+  def uncurry[A,B,C](f: A => B => C): (A, B) => C = ???
 
   /*
   NB: There is a method on the `Function` object in the standard library,
