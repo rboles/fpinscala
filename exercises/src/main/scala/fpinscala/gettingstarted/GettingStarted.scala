@@ -43,7 +43,7 @@ object MyModule {
       else go(y, x+y, i+1)
     }
 
-    if ( n == 0 ) 0
+    if ( n <= 0 ) 0
     else if ( n == 1 ) 1
     else go(0, 1, 2)
   }
@@ -139,15 +139,34 @@ object PolymorphicFunctions {
 
   // Exercise 2: Implement a polymorphic function to check whether 
   // an `Array[A]` is sorted
-  def isSorted[A](as: Array[A], gt: (A,A) => Boolean): Boolean = ??? 
+  //
+  // isSorted(Array(1,2,5,4), (x: Int, y: Int) => y >= x)
+  def isSorted[A](as: Array[A], gt: (A,A) => Boolean): Boolean = { 
+
+    def go(i: Int, status: Boolean): Boolean = {
+      if ( !status ) false
+      else if (i >= as.length - 1 ) true
+      else go(i+1, gt(as(i), as(i+1)))
+    }
+
+    go(0, true)
+  }
   
   // Polymorphic functions are often so constrained by their type
   // that they only have one implementation! Here's an example:
 
   // Exercise 3: Implement `partial1`.
   
-  def partial1[A,B,C](a: A, f: (A,B) => C): B => C = 
-    ??? 
+  def partial1[A,B,C](a: A, f: (A,B) => C): B => C = {
+    def g(b: B): C = f(a, b)
+
+    g
+  }
+
+  // a more compact solution
+  def partial1Compact[A, B, C](a: A, f: (A,B) => C): B => C = {
+    (b: B) => f(a, b)
+  }
   
   // Exercise 4: Implement `curry`.
 
