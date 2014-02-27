@@ -197,7 +197,26 @@ object PolymorphicFunctions {
   // NB: The `Function2` trait has a `curried` method already
 
   // Exercise 5: Implement `uncurry`
-  def uncurry[A,B,C](f: A => B => C): (A, B) => C = ???
+  def uncurry[A,B,C](f: A => B => C): (A, B) => C = {
+    def g(a: A, b: B): C = {
+      val h = f(a)
+      h(b)
+    }
+    g
+  }
+
+  // A little more terse
+  def uncurryCompact1[A,B,C](f: A => B => C): (A, B) => C = {
+    def g(a: A, b: B): C = {
+      f(a)(b)
+    }
+    g
+  }
+
+  // Super compact with function literal
+  def uncurryCompact2[A,B,C](f: A => B => C): (A, B) => C = {
+    (a: A, b: B) => f(a)(b)
+  }
 
   /*
   NB: There is a method on the `Function` object in the standard library,
